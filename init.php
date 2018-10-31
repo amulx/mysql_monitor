@@ -5,7 +5,6 @@ $db = [
 	'password' => filter_input(INPUT_POST,'pwd',FILTER_SANITIZE_STRING),
 	'dsn' => 'mysql:host='.filter_input(INPUT_POST,'host',FILTER_VALIDATE_IP).';dbname=mysql;charset=utf8'
 ];
-error_log(var_export($db,true).PHP_EOL,3,'/tmp/amu.txt');
 
 // 数据库连接
 try {
