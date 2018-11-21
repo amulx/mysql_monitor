@@ -34,7 +34,6 @@ if (filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING) == 'init') {
 	showMessage($code=200,['cul_time'=>date('Y-m-d H:i:s')],'');
 } else if (filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING) == 'pull') {
 	$sql = "select event_time,argument from mysql.general_log where command_type='Query' and argument not like 'set global general_log=on;SET GLOBAL log_output%' and argument not like 'select event_time,argument from%' and argument not like 'SHOW%' and argument not like 'SET NAMES gbk;SET character_set_results=NULL%' and event_time> :event_time";
-	error_log($sql.PHP_EOL,3,'/tmp/amu.txt');
 	$stmt = $pdo->prepare($sql);
 	$stmt->bindParam(':event_time', $_POST['init_time']);
 	$stmt->execute();
