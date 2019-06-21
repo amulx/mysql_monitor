@@ -12,9 +12,9 @@
     <table id="amutable">
         <?php
             $user ='root';    //数据库连接用户名
-            $pass ='sky1806';    //对应的密码
+            $pass ='root';    //对应的密码
             $dbname = 'skym';
-            $hostname = '10.44.47.4';
+            $hostname = '127.0.0.1';
             $dsn = "mysql:host={$hostname};port=3306;dbname={$dbname}";
             $db = new PDO($dsn, $user, $pass);
 
