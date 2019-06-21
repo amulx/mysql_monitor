@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equive="content-type" content="text/html" charset="UTF-8">
+    <title>MySQL数据表详细信息</title>
+    <link rel="stylesheet" href="mysql.css">
+</head>
+<body>
+<div class="bigtitle">MySQL数据表详细信息</div>
+
+<div class="smallcontent">
+    <table id="amutable">
+        <?php
+            $user ='root';    //数据库连接用户名
+            $pass ='sky1806';    //对应的密码
+            $dbname = 'skym';
+            $hostname = '10.44.47.4';
+            $dsn = "mysql:host={$hostname};port=3306;dbname={$dbname}";
+            $db = new PDO($dsn, $user, $pass);
+
+            // 1、获取对应数据库所有的表
+            $selectSql = "select table_name,table_comment from information_schema.tables where table_schema = '{$dbname}'";
+            $pdostatement = $db->query($selectSql);
+            $tables_arr = $pdostatement->fetchAll(PDO::FETCH_ASSOC);
+
+            // 2、对应表的信息
+            foreach ($tables_arr as $key => $value) {
+                $sql = "show FULL FIELDS FROM {$dbname}.{$value['table_name']}";
+                $tableStatement = $db->query($sql);
+                $table_info_arr = $tableStatement->fetchAll(PDO::FETCH_ASSOC);
+                echo "<tr><td colspan='6' align='left' height='40px;'>".($key+1)." 表名：". $value['table_name'] . $value['table_comment']. "</td></tr>";
+                echo '<tr>';
+                    echo '<td class="tdh" style="width: 250px;">序号</td>';
+                    echo '<td class="tdh" style="width: 900px;">字段名</td>';
+                    echo '<td class="tdh" style="width: 900px;">类型</td>';
+                    echo '<td class="tdh" style="width: 900px;">是否为空</td>';
+                    echo '<td class="tdh" style="width: 900px;">主键</td>';
+                    echo '<td class="tdh" style="width: 900px;">字段说明</td>';
+                echo '</tr>';
+
+                foreach ($table_info_arr as $k => $v) {
+                    $flag = ($k % 2==0)?'a':'b';
+                    echo '<tr>';
+                        echo '<td class="td'.$flag.' td1">'.$k.'</td>';
+                        echo '<td class="td'.$flag.' td2">'.$v['Field'].'</td>';
+                        echo '<td class="td'.$flag.' td2">'.$v['Type'].'</td>';
+                        echo '<td class="td'.$flag.' td2">'.$v['Null'].'</td>';
+                        echo '<td class="td'.$flag.' td2">'.$v['Key'].'</td>';
+                        echo '<td class="td'.$flag.' td2">'.$v['Comment'].'</td>';
+                    echo '</tr>';
+                }
+            }
+        ?>       
+    </table>
+</div>
+</body>
+</html>
